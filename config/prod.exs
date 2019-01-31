@@ -98,4 +98,4 @@ config :blockchain_balance,
             "api" => "http://35.227.18.245:7076/",
         },                
     }
-import_config "prod.secret.exs"
+#import_config "prod.secret.exs"
