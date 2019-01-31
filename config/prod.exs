@@ -68,34 +68,4 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs which should be versioned
 # separately.
-config :blockchain_balance,
-    coins: 
-        %{
-        "BTC" => %{
-            "api" => "https://insight.bitpay.com/api",
-        },
-        "LTC" => %{
-            "api" => "https://insight.litecore.io/api",
-        },
-        "DASH" => %{
-            "api" => "https://insight.dash.org/api",
-        },
-        "ETH" => %{
-            "api" => "https://mainnet.infura.io/v3/2294f3b338ad4524aa9186012810e412",
-        },
-        "VET" => %{
-            "api" => "https://sync-mainnet.vechain.org",
-            "api_tokens" => "https://tokenbalance.herokuapp.com/api/balance",
-        },
-        "NEO" => %{
-            "api" => "https://api.neoscan.io/api/main_net/v1",  
-        },
-        "XRP" => %{
-            "api" => "https://xrpnode.herokuapp.com/api",
-            "node" => "main",
-        }, 
-        "NANO" => %{
-            "api" => "http://35.227.18.245:7076/",
-        },                
-    }
 #import_config "prod.secret.exs"
