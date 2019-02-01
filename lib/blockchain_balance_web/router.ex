@@ -9,5 +9,6 @@ defmodule BlockchainBalanceWeb.Router do
     pipe_through :api
     
     post "/balance", BalanceController, :balance
+    get "/txs", BalanceController, :txs
   end
 end
