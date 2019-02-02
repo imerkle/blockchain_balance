@@ -131,7 +131,7 @@ defmodule BlockchainBalanceWeb.BalanceController do
         response = post(api, %{ "action" => "account_history", "count" => 10, "account" => address })
         for x <- response["history"] do
           kind = if x["type"] == "send", do: "sent", else: "got"
-          from = x["type"] == "send", do: address, else: x["account"]
+          from = if x["type"] == "send", do: address, else: x["account"]
           %{
             "from" => from,
             "hash" => x["hash"],
@@ -140,11 +140,7 @@ defmodule BlockchainBalanceWeb.BalanceController do
             "fee" => 0,
             "timestamp" => nil,
           }
-        end
-    data.data.history.map((o) => {
-        const tx: TransactionType = ;
-        txs.push(tx);
-    });        
+        end     
     end
   end
   defp get_balance(ticker, address) do
