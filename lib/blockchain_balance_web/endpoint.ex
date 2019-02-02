@@ -39,6 +39,8 @@ defmodule BlockchainBalanceWeb.Endpoint do
     store: :cookie,
     key: "_blockchain_balance_key",
     signing_salt: "HtsGFJwj"
+  
+  plug CORSPlug
 
   plug BlockchainBalanceWeb.Router
 end

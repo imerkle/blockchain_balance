@@ -39,6 +39,7 @@ defmodule BlockchainBalance.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:httpoison, "~> 1.4"},
       {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
+      {:cors_plug, "~> 2.0"},
     ]
   end
 end
