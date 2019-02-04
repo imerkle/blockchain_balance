@@ -166,7 +166,7 @@ defmodule BlockchainBalanceWeb.BalanceController do
         response = get("#{api}/get_balance/#{address}");
         {Enum.find(response["balance"], fn x -> x["asset_symbol"] == "NEO" end)["amount"], 0}
     end
-    balance = if balance == nil do: 0, else: balance
+    balance = if balance == nil, do: 0, else: balance
     {balance, pending}
   end
     
