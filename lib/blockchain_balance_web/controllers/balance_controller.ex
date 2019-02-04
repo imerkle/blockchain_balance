@@ -17,8 +17,8 @@ defmodule BlockchainBalanceWeb.BalanceController do
 
   defp b(i, coins, balances) do
     coin = Enum.at(coins, i)
-    balance = get_balance(coin["ticker"], coin["address"])
-    balances = Map.put(balances, coin["ticker"], balance)
+    {balance, pending} = get_balance(coin["ticker"], coin["address"])
+    balances = Map.put(balances, coin["ticker"], %{"balance"=> balance, "pending"=>pending})
     if i < length(coins) - 1 do
       b(i+1, coins, balances)
     end || balances
@@ -145,27 +145,29 @@ defmodule BlockchainBalanceWeb.BalanceController do
   end
   defp get_balance(ticker, address) do
     api = @coins[ticker]["api"]
-    case ticker do
+    {balance, pending} = case ticker do
       n when n in ["BTC", "LTC", "DASH"] ->
         response = get("#{api}/addr/#{address}")
-        response.balance
+        {response["balance"], 0}
       "ETH" ->
         response = json_rpc(api, "eth_getBalance", [address, "latest"])
-        hex_to_integer(response)
+        {hex_to_integer(response), 0}
       "NANO" ->
-        body = %{"action"=> "account_balance", "account" => address}
-        post(api, body)
+        response = post(api, %{"action"=> "account_balance", "account" => address})
+        {response.balance, response.pending}
       "VET" ->
         response = get("#{api}/accounts/#{address}")
-        hex_to_integer(response.balance)
+        {hex_to_integer(response["balance"]), 0}
       "XRP" ->
         node = @coins[ticker]["node"]
         response = get("#{api}/account_info/?node=#{node}&address=#{address}")
-        response["result"]["account_data"]["Balance"]
+        {response["result"]["account_data"]["Balance"], 0}
       "NEO" ->
         response = get("#{api}/get_balance/#{address}");
-        Enum.find(response["balance"], fn x -> x["asset_symbol"] == "NEO" end)["amount"]
+        {Enum.find(response["balance"], fn x -> x["asset_symbol"] == "NEO" end)["amount"], 0}
     end
+    balance = if balance == nil do: 0, else: balance
+    {balance, pending}
   end
     
   defp json_rpc(url, method, params) do
