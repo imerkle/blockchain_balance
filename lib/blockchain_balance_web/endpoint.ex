@@ -40,7 +40,7 @@ defmodule BlockchainBalanceWeb.Endpoint do
     key: "_blockchain_balance_key",
     signing_salt: "HtsGFJwj"
   
-  plug CORSPlug
+  plug CORSPlug, origin: ["http://localhost:3000"]
 
   plug BlockchainBalanceWeb.Router
 end
