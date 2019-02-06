@@ -26,36 +26,36 @@ config :blockchain_balance,
     coins: 
         %{
         "BTC" => %{
-            "api" => "https://insight.bitpay.com/api",
+            "api" => "https://test-insight.bitpay.com/api",
             "decimal" => 8,
         },
         "LTC" => %{
-            "api" => "https://insight.litecore.io/api",
+            "api" => "https://testnet.litecore.io/api",
             "decimal" => 8,
         },
         "DASH" => %{
-            "api" => "https://insight.dash.org/api",
+            "api" => "https://testnet-insight.dashevo.org/insight-api-dash",
             "decimal" => 8,
         },
         "ETH" => %{
-            "api" => "https://mainnet.infura.io/v3/2294f3b338ad4524aa9186012810e412",
-            "etherscan_api" => "https://api.etherscan.io/api",
+            "api" => "https://rinkeby.infura.io/v3/2294f3b338ad4524aa9186012810e412",
+            "etherscan_api" => "https://api-rinkeby.etherscan.io/api",
             "etherscan_api_key" => "8FISWFNZET4P2J451BY5I5GERA5MZG34S2",
             "decimal" => 18
         },
         "VET" => %{
-            "api" => "https://sync-mainnet.vechain.org",
-            "api_tokens" => "https://tokenbalance.herokuapp.com/api/balance",
-            "veforge_api" => "https://explore.veforge.com/api",
+            "api" => "https://sync-testnet.vechain.org",
+            "api_tokens" => "https://tokenbalancerinkeby.herokuapp.com/api/balance",
+            "veforge_api" => "https://testnet.veforge.com/api",
             "decimal" => 18,
         },
         "NEO" => %{
-            "api" => "https://api.neoscan.io/api/main_net/v1",
+            "api" => "https://neoscan-testnet.io/api/test_net/v1",
             "decimal" => 0,
         },
         "XRP" => %{
             "api" => "https://xrpnode.herokuapp.com/api",
-            "node" => "main",
+            "node" => "test",
             "decimal" => 6,
         }, 
         "NANO" => %{
