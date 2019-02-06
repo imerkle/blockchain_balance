@@ -8,7 +8,5 @@ defmodule BlockchainBalanceWeb.Router do
   scope "/api", BlockchainBalanceWeb do
     pipe_through :api
     
-    post "/balance", BalanceController, :balance
-    get "/txs", BalanceController, :txs
   end
 end

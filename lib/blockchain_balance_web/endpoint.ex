@@ -1,7 +1,7 @@
 defmodule BlockchainBalanceWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :blockchain_balance
 
-  socket "/socket", BlockchainBalanceWeb.UserSocket,
+  socket "/socket", BlockchainBalanceWeb.MainSocket,
     websocket: true,
     longpoll: false
 

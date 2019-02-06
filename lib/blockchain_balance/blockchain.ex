@@ -1,31 +1,9 @@
-defmodule BlockchainBalanceWeb.BalanceController do
-  use BlockchainBalanceWeb, :controller
-  require Logger
-  
-  @coins Application.get_env(:blockchain_balance, :coins)
-
-  def balance(conn, params) do
-    balances = b(0, params["coins"], %{})
-	  json(conn, balances)
-  end
-  
-  def txs(conn, params) do
-    base = if params["base"] == nil, do: params["rel"], else: params["base"]
-    t = get_txs({params["rel"], base}, params["address"])
-	  json(conn, t)
-  end
-
-  defp b(i, coins, balances) do
-    coin = Enum.at(coins, i)
-    {balance, pending} = get_balance(coin["ticker"], coin["address"])
-    balances = Map.put(balances, coin["ticker"], %{"balance"=> balance, "pending"=>pending})
-    if i < length(coins) - 1 do
-      b(i+1, coins, balances)
-    end || balances
-  end
+defmodule BlockchainBalance.Blockchain do
   
 
-  defp get_txs({rel, base}, address) do
+  @coins Application.get_env(:blockchain_balance, :coins) 
+  
+  def get_txs({rel, base}, address) do
     api = @coins[base]["api"]
     isToken = rel != base
     decimal = :math.pow(10, @coins[base]["decimal"])
@@ -143,7 +121,7 @@ defmodule BlockchainBalanceWeb.BalanceController do
         end     
     end
   end
-  defp get_balance(ticker, address) do
+  def get_balance(ticker, address) do
     api = @coins[ticker]["api"]
     {balance, pending} = case ticker do
       n when n in ["BTC", "LTC", "DASH"] ->
@@ -192,5 +170,5 @@ defmodule BlockchainBalanceWeb.BalanceController do
 
   defp hex_to_integer("0x"<>string) do
     :erlang.binary_to_integer(string, 16)
-  end  
+  end      
 end

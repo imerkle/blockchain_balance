@@ -1,8 +1,8 @@
-defmodule BlockchainBalanceWeb.UserSocket do
+defmodule BlockchainBalanceWeb.MainSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", BlockchainBalanceWeb.RoomChannel
+  channel "info", BlockchainBalanceWeb.InfoChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
