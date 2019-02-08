@@ -13,8 +13,8 @@ defmodule BlockchainBalanceWeb.InfoChannel do
   end
   def handle_in("ping_txs", params, socket) do
     base = if params["base"] == nil, do: params["rel"], else: params["base"]
-    t = Blockchain.get_txs({params["rel"], base}, params["address"])
-    broadcast(socket, "pong_txs", t)
+    payload = Blockchain.get_txs(params["rel"], base, params["address"])
+    broadcast(socket, "pong_txs", %{"txs"=> payload})
     {:noreply,socket}
   end
   defp b([head | tail], socket) do

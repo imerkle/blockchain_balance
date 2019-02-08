@@ -3,7 +3,7 @@ defmodule BlockchainBalance.Blockchain do
 
   @coins Application.get_env(:blockchain_balance, :coins) 
   
-  def get_txs({rel, base}, address) do
+  def get_txs(rel, base, address) do
     api = @coins[base]["api"]
     isToken = rel != base
     decimal = :math.pow(10, @coins[base]["decimal"])
@@ -13,8 +13,8 @@ defmodule BlockchainBalance.Blockchain do
         response = get("#{api}/txs/?address=#{address}")
         for x <- response["txs"] do
           {kind, value} =  if Enum.at(x["vin"], 0)["addr"] != address do
-            value = Enum.reduce(x["vout"], 0,fn x, acc -> 
-              if Enum.at(x["scriptPubKey"]["addresses"], 0) == address do
+            value = Enum.reduce(x["vout"], 0,fn x, acc ->
+              if x["scriptPubKey"]["addresses"]!=nil and Enum.at(x["scriptPubKey"]["addresses"], 0) == address do
                 {v,_} = x["value"] |> Float.parse()
                 acc + v
               end || acc
@@ -24,8 +24,9 @@ defmodule BlockchainBalance.Blockchain do
             {value, _} = Enum.at(x["vout"], 0)["value"] |> Float.parse()
             {"sent", value}
           end
+          from = if Enum.at(x["vin"], 0)["addr"] == nil, do: address, else: Enum.at(x["vin"], 0)["addr"]
           %{
-            "from"=> Enum.at(x["vin"], 0)["addr"],
+            "from"=> from,
             "hash"=> x["txid"],
             "confirmations"=> x["confirmations"],
             "value"=> value,
