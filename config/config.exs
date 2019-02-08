@@ -50,7 +50,8 @@ config :blockchain_balance,
             "decimal" => 18,
         },
         "NEO" => %{
-            "api" => "https://neoscan-testnet.io/api/test_net/v1",
+            #"api" => "https://neoscan-testnet.io/api/test_net/v1",
+            "api" => "http://neoscan.mywish.io/api/main_net/v1",
             "decimal" => 0,
         },
         "XRP" => %{
