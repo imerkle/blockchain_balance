@@ -139,7 +139,7 @@ defmodule BlockchainBalance.Blockchain do
       "XRP" ->
         node = @coins[ticker]["node"]
         response = get("#{api}/account_info/?node=#{node}&address=#{address}")
-        {response["result"]["account_data"]["Balance"], 0}
+        {response["result"]["account_data"]["Balance"] |> Float.parse() |> elem(0), 0}
       "NEO" ->
         response = get("#{api}/get_balance/#{address}");
         {Enum.find(response["balance"], fn x -> x["asset_symbol"] == "NEO" end)["amount"], 0}
