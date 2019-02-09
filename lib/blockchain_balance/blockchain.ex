@@ -124,7 +124,7 @@ defmodule BlockchainBalance.Blockchain do
   end
   def get_balance(ticker, address) do
     api = @coins[ticker]["api"]
-    decimal = :math.pow(10, @coins[base]["decimal"])
+    decimal = :math.pow(10, @coins[ticker]["decimal"])
 
     {balance, pending} = case ticker do
       n when n in ["BTC", "LTC", "DASH"] ->
