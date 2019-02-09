@@ -124,10 +124,12 @@ defmodule BlockchainBalance.Blockchain do
   end
   def get_balance(ticker, address) do
     api = @coins[ticker]["api"]
+    decimal = :math.pow(10, @coins[base]["decimal"])
+
     {balance, pending} = case ticker do
       n when n in ["BTC", "LTC", "DASH"] ->
         response = get("#{api}/addr/#{address}")
-        {response["balance"], 0}
+        {response["balanceSat"], 0}
       "ETH" ->
         response = json_rpc(api, "eth_getBalance", [address, "latest"])
         {hex_to_integer(response), 0}
@@ -145,7 +147,7 @@ defmodule BlockchainBalance.Blockchain do
         response = get("#{api}/get_balance/#{address}");
         {Enum.find(response["balance"], fn x -> x["asset_symbol"] == "NEO" end)["amount"], 0}
     end
-    balance = if balance == nil, do: 0, else: balance
+    balance = if balance == nil, do: 0, else: balance / decimal
     {balance, pending}
   end
     
