@@ -60,8 +60,13 @@ config :blockchain_balance,
             "decimal" => 6,
         }, 
         "NANO" => %{
-            "api" => "http://35.227.18.245:7076/",
-        },                
+            "api" => "http://35.227.18.245:7076",
+            "decimal" => 0,
+        },   
+        "EOS" => %{
+            "api" => "https://api-kylin.eosasia.one/v1",
+            "decimal" => 0,
+        }
     }
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

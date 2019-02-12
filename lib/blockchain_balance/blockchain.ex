@@ -119,7 +119,22 @@ defmodule BlockchainBalance.Blockchain do
             "fee" => 0,
             "timestamp" => nil,
           }
-        end     
+        end
+      "EOs" ->
+        response = post("#{api}/history/get_actions", %{ "account_name" => "address", "pos" => -1, "offset" => -100 })
+        for x <- response["actions"] do
+          from = x["action_trace"]["act"]["data"]["from"]
+          kind = if from == address, do: "sent", else: "got"
+          timestamp = x["block_time"] |> NaiveDateTime.from_iso8601!() |> DateTime.from_naive!("Etc/UTC") |> DateTime.to_unix()
+          %{
+            "from" => from,
+            "hash" => x["action_trace"]["trx_id"],
+            "value" => (x["action_trace"]["act"]["data"]["quantity"] |> Float.parse() |> elem(0)),
+            "kind" => kind,
+            "fee" => 0,
+            "timestamp" => timestamp,
+          }
+        end           
     end
   end
   def get_balance(ticker, address) do
@@ -146,6 +161,9 @@ defmodule BlockchainBalance.Blockchain do
       "NEO" ->
         response = get("#{api}/get_balance/#{address}");
         {Enum.find(response["balance"], fn x -> x["asset_symbol"] == "NEO" end)["amount"], 0}
+      "EOS" ->
+        response = post("#{api}/chain/get_currency_balance", %{"code"=> "eosio.token", "account" => address, "symbol"=> "EOS"})
+        {Enum.at(response, 0) |> Float.parse() |> elem(0), 0}
     end
     balance = if balance == nil, do: 0, else: balance / decimal
     {balance, pending}
