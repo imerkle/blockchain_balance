@@ -120,7 +120,7 @@ defmodule BlockchainBalance.Blockchain do
             "timestamp" => nil,
           }
         end
-      "EOs" ->
+      "EOS" ->
         response = post("#{api}/history/get_actions", %{ "account_name" => "address", "pos" => -1, "offset" => -100 })
         for x <- response["actions"] do
           from = x["action_trace"]["act"]["data"]["from"]
