@@ -122,7 +122,6 @@ defmodule BlockchainBalance.Blockchain do
         end
       "EOS" ->
         response = post("#{api}/history/get_actions", %{ "account_name" => address, "pos" => -1, "offset" => -100 })
-        IO.inspect response
         for x <- response["actions"] do
           from = x["action_trace"]["act"]["data"]["from"]
           kind = if from == address, do: "sent", else: "got"
