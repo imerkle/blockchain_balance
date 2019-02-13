@@ -73,6 +73,7 @@ defmodule BlockchainBalance.Blockchain do
                 "kind" => kind,
                 "fee" => 0,
                 "timestamp" => x["timestamp"],
+                "confirmations" => 1,                
             }
           end
         end
@@ -98,12 +99,12 @@ defmodule BlockchainBalance.Blockchain do
             %{
               "from" => x["tx"]["Account"],
               "hash" => x["tx"]["hash"],
-              "confirmations" => 1,
               "value" => (x["tx"]["Amount"] |> Float.parse() |> elem(0)) / decimal,
               "kind" => kind,
               "fee" => x["tx"]["Fee"] |> Float.parse() |> elem(0),
               #https://github.com/ripple/ripple-lib/issues/41
               "timestamp" => x["tx"]["date"] + 946684800,
+              "confirmations" => 1,
             }
         end
       "NANO" ->
@@ -118,6 +119,7 @@ defmodule BlockchainBalance.Blockchain do
             "kind" => kind,
             "fee" => 0,
             "timestamp" => nil,
+            "confirmations" => 1,            
           }
         end
       "EOS" ->
@@ -133,6 +135,7 @@ defmodule BlockchainBalance.Blockchain do
             "kind" => kind,
             "fee" => 0,
             "timestamp" => timestamp,
+            "confirmations" => 1,            
           }
         end           
     end
