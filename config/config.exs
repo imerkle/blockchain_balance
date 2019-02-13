@@ -64,7 +64,7 @@ config :blockchain_balance,
             "decimal" => 0,
         },   
         "EOS" => %{
-            "api" => "https://api-kylin.eosasia.one/v1",
+            "api" => "https://api-kylin.eoslaomao.com/v1",
             "decimal" => 0,
         }
     }
