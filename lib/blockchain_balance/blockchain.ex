@@ -171,7 +171,7 @@ defmodule BlockchainBalance.Blockchain do
     balance = if balance == nil, do: 0, else: balance / decimal
     {balance, pending}
   end
-    
+  
   defp json_rpc(url, method, params) do
     body = %{
       "jsonrpc" => "2.0",
@@ -194,5 +194,12 @@ defmodule BlockchainBalance.Blockchain do
 
   defp hex_to_integer("0x"<>string) do
     :erlang.binary_to_integer(string, 16)
-  end      
+  end
+
+
+  def get_eos_name(ticker, public_key) do
+    api = @coins[ticker]["api"]
+    response = post("#{api}/history/get_key_accounts", %{"public_key"=> public_key})
+    Enum.at(response["account_names"], 0)
+  end  
 end

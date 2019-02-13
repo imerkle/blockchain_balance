@@ -5,8 +5,9 @@ defmodule BlockchainBalanceWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", BlockchainBalanceWeb do
+  scope "/", BlockchainBalanceWeb do
     pipe_through :api
     
+    get "/eos_account_name", EosController, :account_name
   end
 end
