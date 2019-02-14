@@ -37,10 +37,9 @@ defmodule BlockchainBalance.Blockchain do
         end
       "ETH" -> 
         action = if isToken, do: "tokentx", else: "txlist"
-        etherscan_api = @coins[base]["etherscan_api"]
-        etherscan_api_key = @coins[base]["etherscan_api_key"]
+        blockscout_api = @coins[base]["blockscout_api"]
 
-        response = get("#{etherscan_api}/?module=account&action=#{action}&address=#{address}&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=#{etherscan_api_key}")
+        response = get("#{blockscout_api}/?module=account&action=#{action}&address=#{address}&sort=desc")
         for x <- response["result"] do
           {v, _} = x["value"] |> Float.parse()
           value = if isToken, do: v / :math.pow(10, x["tokenDecimal"] |> Float.parse() |> elem(0) ), else: v / decimal
@@ -51,7 +50,7 @@ defmodule BlockchainBalance.Blockchain do
             "confirmations" => x["confirmations"] |> Integer.parse() |> elem(0),
             "value" => value,
             "kind" => kind,
-            "fee" => elem(x["gas"] |> Float.parse, 0) * elem(x["gasPrice"] |> Float.parse, 0) / decimal,
+            "fee" => elem(x["gasUsed"] |> Float.parse, 0) * elem(x["gasPrice"] |> Float.parse, 0) / decimal,
             "timestamp" => x["timeStamp"] |> Integer.parse() |> elem(0),
           }
         end
@@ -60,7 +59,6 @@ defmodule BlockchainBalance.Blockchain do
         asset = if !isToken, do: nil, else: @coins[base]["assets"][rel]
         path = if !isToken, do: "transactions", else: "tokenTransfers"
         response = get("#{veforge_api}/#{path}?address=#{address}&count=10&offset=0")
-        IO.inspect response[path] |> Enum.at(0)
         for x <- response[path] do
           if base == rel or asset["hash"] == x["contractAddress"] and x["transaction"]["reverted"] != nil do
             hash = if !isToken, do: x["id"], else: x["txId"]

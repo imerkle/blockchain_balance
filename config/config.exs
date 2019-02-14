@@ -39,8 +39,7 @@ config :blockchain_balance,
         },
         "ETH" => %{
             "api" => "https://rinkeby.infura.io/v3/2294f3b338ad4524aa9186012810e412",
-            "etherscan_api" => "https://api-rinkeby.etherscan.io/api",
-            "etherscan_api_key" => "8FISWFNZET4P2J451BY5I5GERA5MZG34S2",
+            "blockscout_api" => "https://blockscout.com/eth/rinkeby/api",
             "decimal" => 18
         },
         "VET" => %{
