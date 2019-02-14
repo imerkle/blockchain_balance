@@ -124,7 +124,7 @@ defmodule BlockchainBalance.Blockchain do
         end
       "EOS" ->
         response = post("#{api}/history/get_actions", %{ "account_name" => address, "pos" => -1, "offset" => -100 })
-        for x <- response["actions"] do
+        txs = for x <- response["actions"] do
           from = x["action_trace"]["act"]["data"]["from"]
           kind = if from == address, do: "sent", else: "got"
           timestamp = x["block_time"] |> NaiveDateTime.from_iso8601!() |> DateTime.from_naive!("Etc/UTC") |> DateTime.to_unix()
@@ -137,7 +137,8 @@ defmodule BlockchainBalance.Blockchain do
             "timestamp" => timestamp,
             "confirmations" => 1,            
           }
-        end           
+        end
+        txs |> Enum.reverse()
     end
   end
   def get_balance(ticker, address) do
