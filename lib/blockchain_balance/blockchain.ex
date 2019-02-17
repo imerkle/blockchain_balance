@@ -143,32 +143,48 @@ defmodule BlockchainBalance.Blockchain do
     api = @coins[ticker]["api"]
     decimal = :math.pow(10, @coins[ticker]["decimal"])
 
-    {balance, pending} = case ticker do
+    case ticker do
       n when n in ["BTC", "LTC", "DASH"] ->
         response = get("#{api}/addr/#{address}")
-        {response["balanceSat"], 0}
+        [%{"rel"=> ticker, "balance" => response["balanceSat"] / decimal}]
       "ETH" ->
         response = json_rpc(api, "eth_getBalance", [address, "latest"])
-        {hex_to_integer(response), 0}
+        [%{"rel"=> ticker, "balance" => hex_to_integer(response)  / decimal }] ++ get_balance_tokens(ticker, address)
       "NANO" ->
         response = post(api, %{"action"=> "account_balance", "account" => address})
-        {response.balance, response.pending}
+        [%{"rel"=> ticker, "balance" => response.balance, "pending"=> response.pending}]
       "VET" ->
         response = get("#{api}/accounts/#{address}")
-        {hex_to_integer(response["balance"]), 0}
+        [%{"rel"=> ticker, "balance" => hex_to_integer(response["balance"])  / decimal }]
       "XRP" ->
         node = @coins[ticker]["node"]
         response = get("#{api}/account_info/?node=#{node}&address=#{address}")
-        {response["result"]["account_data"]["Balance"] |> Float.parse() |> elem(0), 0}
+        b = response["result"]["account_data"]["Balance"] |> Float.parse() |> elem(0)
+        [%{"rel"=> ticker, "balance" => b / decimal}]
       "NEO" ->
         response = get("#{api}/get_balance/#{address}");
-        {Enum.find(response["balance"], fn x -> x["asset_symbol"] == "NEO" end)["amount"], 0}
+        for x <- response["balance"] do
+          %{"rel"=> x["asset_symbol"], "balance" => x["amount"]}
+        end
       "EOS" ->
         response = post("#{api}/chain/get_currency_balance", %{"code"=> "eosio.token", "account" => address, "symbol"=> "EOS"})
-        {Enum.at(response, 0) |> Float.parse() |> elem(0), 0}
+        b = Enum.at(response, 0) |> Float.parse() |> elem(0)
+        [%{"rel"=> ticker, "balance" => b  / decimal}]
     end
-    balance = if balance == nil, do: 0, else: balance / decimal
-    {balance, pending}
+  end
+
+  def get_balance_tokens(base, address) do 
+    case base do
+      "ETH" -> 
+        blockscout_api = @coins[base]["blockscout_api"]
+        response = get("#{blockscout_api}/?module=account&action=tokenlist&address=#{address}")
+        for x <- response["result"] do
+          d = x["decimals"] |> Integer.parse() |> elem(0)
+          decimals = :math.pow(10, d)
+          b = x["balance"] |> Float.parse() |> elem(0)          
+          %{"rel"=> x["symbol"], "balance"=> b / decimals}
+        end
+    end
   end
   
   defp json_rpc(url, method, params) do
