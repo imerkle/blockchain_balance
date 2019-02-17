@@ -18,9 +18,8 @@ defmodule BlockchainBalanceWeb.InfoChannel do
     {:noreply,socket}
   end
   defp b([head | tail], socket) do
-    {balance, pending} = Blockchain.get_balance(head["ticker"], head["address"])
-    payload = %{ "ticker" => head["ticker"], "balances" => %{"balance"=> balance, "pending"=>pending} }
-    broadcast(socket, "pong_balance", payload)
+    balance_list = Blockchain.get_balance(head["ticker"], head["address"])
+    broadcast(socket, "pong_balance", %{"list"=> balance_list})
     b(tail, socket)
   end
   defp b([], _socket) do
