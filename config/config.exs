@@ -47,7 +47,16 @@ config :blockchain_balance,
             "api_tokens" => "https://tokenbalancerinkeby.herokuapp.com/api/balance",
             "veforge_api" => "https://testnet.veforge.com/api",
             "decimal" => 18,
-        },
+            "energy_ticker" => "VTHO",
+            "energy_decimal" => 18,
+            "assets" => [
+                %{
+                    "symbol"=> "VTHO",
+                    "hash"=>"0x0000000000000000000000000000456e65726779",
+                    "decimal" => 18
+                },                                                                              
+            ]
+        }, 
         "NEO" => %{
             #"api" => "https://neoscan-testnet.io/api/test_net/v1",
             "api" => "http://neoscan.mywish.io/api/main_net/v1",

@@ -4,7 +4,7 @@ defmodule BlockchainBalance.Blockchain do
   @coins Application.get_env(:blockchain_balance, :coins) 
   
   def get_txs(rel, base, address) do
-    api = @coins[base]["api"]
+    api = if @coins[rel]!= nil, do: @coins[rel]["api"], else: @coins[base]["api"]
     isToken = rel != base
     decimal = :math.pow(10, @coins[base]["decimal"])
 
@@ -155,7 +155,11 @@ defmodule BlockchainBalance.Blockchain do
         [%{"rel"=> ticker, "balance" => response.balance, "pending"=> response.pending}]
       "VET" ->
         response = get("#{api}/accounts/#{address}")
-        [%{"rel"=> ticker, "balance" => hex_to_integer(response["balance"])  / decimal }]
+        energy_decimal = :math.pow(10, @coins[ticker]["energy_decimal"])
+        [
+          %{"rel"=> ticker, "balance" => hex_to_integer(response["balance"])  / decimal },
+          %{"rel"=>  @coins[ticker]["energy_ticker"], "balance" => hex_to_integer(response["energy"])  / energy_decimal },
+        ]
       "XRP" ->
         node = @coins[ticker]["node"]
         response = get("#{api}/account_info/?node=#{node}&address=#{address}")
@@ -184,6 +188,17 @@ defmodule BlockchainBalance.Blockchain do
           b = x["balance"] |> Float.parse() |> elem(0)          
           %{"rel"=> x["symbol"], "balance"=> b / decimals}
         end
+      "VET" ->
+        veforge_api = @coins[base]["veforge_api"]
+        response = get("#{veforge_api}/account/#{address}/tokenBalances")
+        assets = @coins[base]["assets"]
+        for  {k, v}  <-  response  do
+          asset = Enum.filter(assets, fn x -> x["hash"]==k end) |> Enum.at(0)
+          decimals = :math.pow(10, asset["decimal"])
+          b = v / decimals
+          %{"rel"=> asset["symbol"], "balance"=> b}
+        end
+
     end
   end
   
