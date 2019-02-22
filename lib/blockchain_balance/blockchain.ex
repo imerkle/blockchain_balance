@@ -144,7 +144,7 @@ defmodule BlockchainBalance.Blockchain do
     decimal = :math.pow(10, @coins[ticker]["decimal"])
 
     case ticker do
-      n when n in ["BTC", "LTC", "DASH"] ->
+      n when n in ["BTC", "LTC", "DASH","BCH"] ->
         response = get("#{api}/addr/#{address}")
         [%{"rel"=> ticker, "balance" => response["balanceSat"] / decimal}]
       "ETH" ->
