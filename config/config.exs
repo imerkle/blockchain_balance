@@ -37,6 +37,10 @@ config :blockchain_balance,
             "api" => "https://testnet-insight.dashevo.org/insight-api-dash",
             "decimal" => 8,
         },
+        "BCH" => %{
+            "api" => "https://test-bch-insight.bitpay.com/api",
+            "decimal" => 8,
+        },
         "ETH" => %{
             "api" => "https://rinkeby.infura.io/v3/2294f3b338ad4524aa9186012810e412",
             "blockscout_api" => "https://blockscout.com/eth/rinkeby/api",
