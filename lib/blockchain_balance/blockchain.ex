@@ -105,6 +105,25 @@ defmodule BlockchainBalance.Blockchain do
               "confirmations" => 1,
             }
         end
+      "XLM" ->
+        response = get("#{api}/accounts/#{address}/transactions?limit=5&order=desc")        
+        for x <- response["_embedded"]["records"] do
+          hash = x["id"]
+          res = get("#{api}/transactions/#{hash}/operations?limit=1&order=desc")
+          operation = res["_embedded"]["records"] |> Enum.at(0)
+          amount = if operation["amount"] != nil, do: operation["amount"], else: operation["starting_balance"]
+          kind = if x["source_account"] |> String.downcase() == address |> String.downcase(), do: "sent", else: "got"
+          timestamp = x["created_at"] |> NaiveDateTime.from_iso8601!() |> DateTime.from_naive!("Etc/UTC") |> DateTime.to_unix()          
+          %{
+            "from" => x["source_account"],
+            "hash" => hash,
+            "value" => (amount |> Float.parse() |> elem(0)) / decimal,
+            "kind" => kind,
+            "fee" => x["fee_paid"],
+            "timestamp" => timestamp,
+            "confirmations" => 1,
+          }
+      end        
       "NANO" ->
         response = post(api, %{ "action" => "account_history", "count" => 10, "account" => address })
         for x <- response["history"] do
@@ -165,6 +184,11 @@ defmodule BlockchainBalance.Blockchain do
         response = get("#{api}/account_info/?node=#{node}&address=#{address}")
         b = response["result"]["account_data"]["Balance"] |> Float.parse() |> elem(0)
         [%{"rel"=> ticker, "balance" => b / decimal}]
+      "XLM" ->
+        response = get("#{api}/accounts/#{address}")
+        balances = Enum.filter(response["balances"], fn x -> x["asset_type"] == "native" end) |> Enum.at(0)
+        b = balances["balance"] |> Float.parse() |> elem(0)
+        [%{"rel"=> ticker, "balance" => b  / decimal}]
       "NEO" ->
         response = get("#{api}/get_balance/#{address}");
         for x <- response["balance"] do
