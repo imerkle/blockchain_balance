@@ -3,6 +3,9 @@ defmodule BlockchainBalance.Blockchain do
 
   @coins Application.get_env(:blockchain_balance, :coins) 
   
+  def send_tx(ticker, tx) do
+
+  end
   def get_txs(rel, base, address) do
     api = if @coins[rel]!= nil, do: @coins[rel]["api"], else: @coins[base]["api"]
     isToken = rel != base
@@ -239,11 +242,19 @@ defmodule BlockchainBalance.Blockchain do
   end
   defp get(url) do
     response = HTTPoison.get!(url)
-    response.body |> Jason.decode!
+    result = response.body |> Jason.decode()
+    case result do
+      {:ok, decoded} -> decoded
+      {:error, _} -> %{"result"=>[]}
+    end
   end
   defp post(url, body) do
     response = HTTPoison.post!(url, body |> Jason.encode!, [{"Content-Type", "application/json"}])
-    response.body |> Jason.decode!
+    result = response.body |> Jason.decode()
+    case result do
+      {:ok, decoded} -> decoded
+      {:error, _} -> %{}
+    end    
   end
 
   defp hex_to_integer("0x"<>string) do
