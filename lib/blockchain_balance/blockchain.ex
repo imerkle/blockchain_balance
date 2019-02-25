@@ -248,7 +248,7 @@ defmodule BlockchainBalance.Blockchain do
       {:error, _} -> %{"result"=>[]}
     end
   end
-  defp post(url, body) do
+  def post(url, body) do
     response = HTTPoison.post!(url, body |> Jason.encode!, [{"Content-Type", "application/json"}])
     result = response.body |> Jason.decode()
     case result do
