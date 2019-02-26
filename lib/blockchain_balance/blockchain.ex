@@ -267,11 +267,11 @@ defmodule BlockchainBalance.Blockchain do
   def get_best_block_vet(ticker) do
     api = @coins[ticker]["api"]
     response = get("#{api}/blocks/best")
-    response.id
+    response["id"]
   end
   def post_tx_vet(ticker, rawTx) do
     api = @coins[ticker]["api"]
     response = post("#{api}/transactions",%{"raw"=> rawTx})
-    response.id
+    response["id"]
   end
 end
