@@ -3,9 +3,6 @@ defmodule BlockchainBalance.Blockchain do
 
   @coins Application.get_env(:blockchain_balance, :coins) 
   
-  def send_tx(ticker, tx) do
-
-  end
   def get_txs(rel, base, address) do
     api = if @coins[rel]!= nil, do: @coins[rel]["api"], else: @coins[base]["api"]
     isToken = rel != base
@@ -248,8 +245,8 @@ defmodule BlockchainBalance.Blockchain do
       {:error, _} -> %{"result"=>[]}
     end
   end
-  def post(url, body) do
-    response = HTTPoison.post!(url, body |> Jason.encode!, [{"Content-Type", "application/json"}])
+  defp post(url, body, opts \\ [{"Content-Type", "application/json"}]) do
+    response = HTTPoison.post!(url, body |> Jason.encode!, opts)
     result = response.body |> Jason.decode()
     case result do
       {:ok, decoded} -> decoded
@@ -266,5 +263,15 @@ defmodule BlockchainBalance.Blockchain do
     api = @coins[ticker]["api"]
     response = post("#{api}/history/get_key_accounts", %{"public_key"=> public_key})
     Enum.at(response["account_names"], 0)
-  end  
+  end
+  def get_best_block_vet(ticker) do
+    api = @coins[ticker]["api"]
+    response = get("#{api}/blocks/best")
+    response.id
+  end
+  def post_tx_vet(ticker, rawTx) do
+    api = @coins[ticker]["api"]
+    response = post("#{api}/transactions",%{"raw"=> rawTx})
+    response.id
+  end
 end

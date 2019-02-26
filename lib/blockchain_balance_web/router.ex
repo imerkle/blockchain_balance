@@ -10,6 +10,7 @@ defmodule BlockchainBalanceWeb.Router do
     
     get "/eos_account_name", EosController, :account_name
     
-    post "/xlm_post_tx", XlmController, :post_tx
+    get "/best_block_vet", VetController, :best_block
+    post "/post_tx_vet", VetController, :post_tx
   end
 end
