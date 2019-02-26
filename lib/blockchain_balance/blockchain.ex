@@ -56,7 +56,7 @@ defmodule BlockchainBalance.Blockchain do
         end
       "VET" ->
         veforge_api = @coins[base]["veforge_api"]
-        asset = if !isToken, do: nil, else: @coins[base]["assets"][rel]
+        asset = if !isToken, do: nil, else: Enum.filter(@coins[base]["assets"], fn x-> x["symbol"] == rel end) |> Enum.at(0)
         path = if !isToken, do: "transactions", else: "tokenTransfers"
         response = get("#{veforge_api}/#{path}?address=#{address}&count=10&offset=0")
         for x <- response[path] do
