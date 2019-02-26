@@ -62,7 +62,7 @@ defmodule BlockchainBalance.Blockchain do
         for x <- response[path] do
           if base == rel or asset["hash"] == x["contractAddress"] and x["transaction"]["reverted"] != nil do
             hash = if !isToken, do: x["id"], else: x["txId"]
-            value = if !isToken, do: x["totalValue"], else: x["amount"]
+            value = if !isToken, do: x["totalValue"], else: hex_to_integer(x["amount"])
             kind = if x["origin"] == address, do: "sent", else: "got"
             %{
                 "from" => x["origin"],
