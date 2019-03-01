@@ -7,11 +7,10 @@
     ],
     "website": "https://github.com/imerkle/blockchain_balance",
     "repository": "https://github.com/imerkle/blockchain_balance",
-    "logo": "https://raw.githubusercontent.com/mirego/accent/master/priv/static/images/accent.png",
     "success_url": "/",
     "env": {
       "MIX_ENV": {
-        "description": "The environment in which Elixir code will run",
+        "description": "The environment in which Elixir code will run: prod/prodtest",
         "value": "prod"
       }
     },
