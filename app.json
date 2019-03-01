@@ -1,0 +1,23 @@
+{
+    "name": "Blockchain Balance",
+    "description": "▴ Open-source, self-hosted, blockchain explorer indexer",
+    "keywords": [
+      "elixir",
+      "blockchain"
+    ],
+    "website": "https://github.com/imerkle/blockchain_balance",
+    "repository": "https://github.com/imerkle/blockchain_balance",
+    "logo": "https://raw.githubusercontent.com/mirego/accent/master/priv/static/images/accent.png",
+    "success_url": "/",
+    "env": {
+      "MIX_ENV": {
+        "description": "The environment in which Elixir code will run",
+        "value": "prod"
+      }
+    },
+    "buildpacks": [
+      {
+        "url": "https://github.com/HashNuke/heroku-buildpack-elixir"
+      }
+    ]
+  }

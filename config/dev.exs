@@ -46,3 +46,67 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+
+config :blockchain_balance,
+    coins: 
+        %{
+        "BTC" => %{
+            "api" => "https://test-insight.bitpay.com/api",
+            "decimal" => 8,
+        },
+        "LTC" => %{
+            "api" => "https://testnet.litecore.io/api",
+            "decimal" => 8,
+        },
+        "DASH" => %{
+            "api" => "https://testnet-insight.dashevo.org/insight-api-dash",
+            "decimal" => 8,
+        },
+        "BCH" => %{
+            "api" => "https://test-bch-insight.bitpay.com/api",
+            "decimal" => 8,
+        },
+        "ETH" => %{
+            "api" => "https://rinkeby.infura.io/v3/2294f3b338ad4524aa9186012810e412",
+            "blockscout_api" => "https://blockscout.com/eth/rinkeby/api",
+            "decimal" => 18
+        },
+        "VET" => %{
+            "api" => "https://sync-testnet.vechain.org",
+            "api_tokens" => "https://tokenbalancerinkeby.herokuapp.com/api/balance",
+            "veforge_api" => "https://testnet.veforge.com/api",
+            "decimal" => 18,
+            "energy_ticker" => "VTHO",
+            "energy_decimal" => 18,
+            "assets" => [
+                %{
+                    "symbol"=> "VTHO",
+                    "hash"=>"0x0000000000000000000000000000456e65726779",
+                    "decimal" => 18
+                },                                                                              
+            ]
+        }, 
+        "NEO" => %{
+            "api" => "http://neoscan.mywish.io/api/main_net/v1",
+            "decimal" => 0,
+        },
+        "XRP" => %{
+            "api" => "https://xrpnode.herokuapp.com/api",
+            "node" => "test",
+            "decimal" => 6,
+        }, 
+        "XLM" => %{
+            "api" => "https://horizon-testnet.stellar.org",
+            "node" => "test",
+            "decimal" => 0,
+        }, 
+        "NANO" => %{
+            "api" => "http://35.227.18.245:7076",
+            "decimal" => 0,
+        },   
+        "EOS" => %{
+            "api" => "https://api-kylin.eoslaomao.com/v1",
+            "decimal" => 0,
+        }
+    }
