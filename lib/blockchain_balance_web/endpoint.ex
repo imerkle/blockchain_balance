@@ -40,7 +40,7 @@ defmodule BlockchainBalanceWeb.Endpoint do
     key: "_blockchain_balance_key",
     signing_salt: "HtsGFJwj"
   
-  plug CORSPlug, origin: ~r/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/
+  plug CORSPlug, origin: "*"
 
   plug BlockchainBalanceWeb.Router
 end
